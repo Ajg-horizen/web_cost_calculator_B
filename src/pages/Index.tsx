@@ -21,11 +21,10 @@ import StepHosting from "@/components/calculator/StepHosting";
 import StepLeadForm from "@/components/calculator/StepLeadForm";
 import StepLoadingPrice from "@/components/calculator/StepLoadingPrice";
 import StepResult from "@/components/calculator/StepResult";
-import StepConfirmation from "@/components/calculator/StepConfirmation";
 import { type CalculatorState, initialCalculatorState } from "@/lib/calculator-types";
 import { generateDiscountCode } from "@/components/calculator/UrgencyOffer";
 
-const TOTAL_STEPS = 12;
+const TOTAL_STEPS = 11;
 
 const Index = () => {
   const [started, setStarted] = useState(false);
@@ -130,7 +129,6 @@ const Index = () => {
         return true;
       case 10:
         return state.leadName.trim() !== "" && state.leadEmail.trim() !== "" && state.leadPhone.trim() !== "";
-      case 11: return true; // Result step - always can proceed
       default: return false;
     }
   };
@@ -259,9 +257,7 @@ const Index = () => {
   }
 
   // Web flow
-  const isLastStep = currentStep === TOTAL_STEPS;
   const isResultStep = currentStep === 11;
-  const isConfirmationStep = currentStep === 12;
 
   return (
     <div className="min-h-screen gradient-hero">
@@ -358,11 +354,10 @@ const Index = () => {
               />
             )}
             {currentStep === 11 && <StepResult state={state} discountCode={discountCode} />}
-            {currentStep === 12 && <StepConfirmation />}
           </div>
         </main>
 
-        {!isLastStep && !isResultStep && !isConfirmationStep && (
+        {!isResultStep && (
           <footer className="px-4 sm:px-8 py-6">
             <div className="max-w-4xl mx-auto flex items-center justify-between">
               <Button
@@ -388,33 +383,6 @@ const Index = () => {
               >
                 {currentStep === 10 ? "Se min pris" : currentStep === 9 ? "Beregn min pris" : "Fortsæt"}
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </footer>
-        )}
-
-        {isResultStep && (
-          <footer className="px-4 sm:px-8 py-6">
-            <div className="max-w-4xl mx-auto flex items-center justify-start">
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setCurrentStep(10);
-                }}
-                className="text-hero-muted hover:text-hero-foreground hover:bg-hero-foreground/5"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Tilbage
-              </Button>
-            </div>
-          </footer>
-        )}
-
-        {isLastStep && (
-          <footer className="px-4 sm:px-8 py-6">
-            <div className="max-w-4xl mx-auto flex items-center justify-center">
-              <Button variant="ghost" onClick={handleReset} className="text-hero-muted hover:text-hero-foreground hover:bg-hero-foreground/5">
-                Start forfra
               </Button>
             </div>
           </footer>
