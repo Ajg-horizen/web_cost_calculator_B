@@ -1,77 +1,95 @@
-// Central configuration – all pricing logic lives here
-// INTERNAL: hourly rate must never be exposed in frontend UI
+import type { Addon } from "./calculator-types";
 
-export const HOURLY_RATE = 550; // DKK
-export const MONTHLY_HOSTING_FEE = 399; // DKK
+// === Shared ===
+export const DISCOUNT_THRESHOLD = 15000; // DKK — rabat over dette beløb (custom)
+export const WEBSHOP_DISCOUNT_THRESHOLD = 25000; // DKK — rabat over dette beløb (webshop)
+export const BASE_DISCOUNT = 30; // % — automatisk rabat over tærskel
+export const URGENCY_BONUS = 20; // % — ekstra rabat ved bestilling inden 24 timer
+export const TOTAL_MAX_DISCOUNT = 50; // % — samlet max rabat
 
-// Hours for existing website migration
-export const EXISTING_WEBSITE_HOURS = 5;
+// === Template ===
+export const TEMPLATE_PRICE = 4999; // DKK (psykologisk prissætning)
 
-// Size hours: [efficient, collaborative]
-export const WEBSITE_SIZE_HOURS: Record<string, [number, number]> = {
-  "1-5": [8, 20],
-  "5-10": [13, 29],
-  "10+": [18, 39],
-};
+// === Skræddersyet (custom) ===
+export const BASE_PRICE = 5999; // DKK
+export const MONTHLY_HOSTING_FEE = 399; // DKK/md
+export const HOSTING_YEARLY = MONTHLY_HOSTING_FEE * 12; // 4.788 DKK/år
 
-export const WEBSHOP_SIZE_HOURS: Record<string, [number, number]> = {
-  "up-to-20": [35, 60],
-  "20-100": [50, 80],
-  "100+": [70, 110],
-};
+export const ADDONS: Addon[] = [
+  { id: "extra-page", label: "Ekstra underside", description: "5 sider er inkluderet — tilkøb flere her", price: 1000, type: "quantity", maxQuantity: 10 },
+  { id: "contact-form", label: "Kontaktformular", description: "Formular med email-notifikation til dig", price: 500, type: "checkbox" },
+  { id: "booking", label: "Booking-integration", description: "Calendly eller tidsbooking integreret på siden", price: 2500, type: "checkbox" },
+  { id: "gallery", label: "Billedgalleri / portfolio", description: "Responsivt galleri med lightbox-visning", price: 1000, type: "checkbox" },
+  { id: "seo", label: "SEO-grundpakke", description: "Meta-tags, sitemap og hastighedsoptimering", price: 1500, type: "checkbox" },
+  { id: "analytics", label: "Google Analytics opsætning", description: "GA4 + events setup så du kan følge trafikken", price: 500, type: "checkbox" },
+  { id: "cookie-banner", label: "Cookie-banner (GDPR)", description: "Lovpligtig cookie-samtykke løsning", price: 500, type: "checkbox" },
+  { id: "extra-revision", label: "Ekstra designrevision", description: "1 revision er inkluderet — tilkøb flere her", price: 1000, type: "quantity", maxQuantity: 5 },
+];
 
-// Additional features hours: [efficient, collaborative]
-export const WEBSITE_FEATURES: Record<string, { label: string; hours: [number, number] }> = {
-  booking: { label: "Bookingsystem", hours: [6, 8] },
-  integration: { label: "Integration", hours: [6, 8] },
-};
+export const INCLUDED_FEATURES = [
+  "5 sider med responsivt design",
+  "Mobil- og tablet-optimeret",
+  "1 designrevision",
+  "SSL-certifikat (https)",
+  "Hurtig loadtid",
+];
 
-export const WEBSHOP_FEATURES: Record<string, { label: string; hours: [number, number] }> = {
-  payment: { label: "Betalingsgateway opsætning", hours: [5, 6] },
-  shipping: { label: "Fragt opsætning", hours: [4, 6] },
-  integration: { label: "Integration", hours: [8, 10] },
-};
+// === Webshop ===
+export const WEBSHOP_BASE_PRICE = 14999; // DKK
+export const WEBSHOP_HOSTING_MONTHLY = 599; // DKK/md
+export const WEBSHOP_HOSTING_YEARLY = WEBSHOP_HOSTING_MONTHLY * 12; // 7.188 DKK/år
 
-// Special features
-export const SPECIAL_FEATURES_HOURS = 8;
-export const STANDARD_INTERVAL = 0.15; // ±15%
-export const SPECIAL_INTERVAL = 0.20; // ±20%
+export const WEBSHOP_ADDONS: Addon[] = [
+  { id: "products-100", label: "Op til 100 produkter", description: "Opgrader fra 30 til 100 produkter", price: 20000, type: "checkbox" },
+  { id: "products-200", label: "200+ produkter", description: "Opgrader til 200+ produkter med avanceret struktur", price: 60000, type: "checkbox" },
+  { id: "payment-gateway", label: "Betalingsgateway", description: "Stripe, MobilePay, kortbetaling", price: 3000, type: "checkbox" },
+  { id: "shipping", label: "Fragt-integration", description: "GLS, PostNord, DAO automatisk fragtberegning", price: 2500, type: "checkbox" },
+  { id: "inventory", label: "Lagerstyring", description: "Automatisk lagerstatus og alerts", price: 2000, type: "checkbox" },
+  { id: "discount-codes", label: "Rabatkoder & kampagner", description: "Procentrabat, faste beløb, gratis fragt-tilbud", price: 1500, type: "checkbox" },
+  { id: "product-filters", label: "Produktfiltrering", description: "Filtrér efter kategori, pris, størrelse m.m.", price: 1500, type: "checkbox" },
+  { id: "newsletter", label: "Nyhedsbrev-integration", description: "Mailchimp eller lignende integration", price: 1000, type: "checkbox" },
+  { id: "seo", label: "SEO-grundpakke", description: "Meta-tags, sitemap og hastighedsoptimering", price: 1500, type: "checkbox" },
+  { id: "cookie-banner", label: "Cookie-banner (GDPR)", description: "Lovpligtig cookie-samtykke løsning", price: 500, type: "checkbox" },
+  { id: "extra-revision", label: "Ekstra designrevision", description: "1 revision er inkluderet — tilkøb flere her", price: 1000, type: "quantity", maxQuantity: 5 },
+];
 
-// Visual identity hours (collaborative only)
-export const VISUAL_IDENTITY_HOURS: Record<string, number> = {
-  "logo-guidelines": 0,
-  "logo-only": 6,
-  "no-identity": 12,
-};
+export const WEBSHOP_INCLUDED_FEATURES = [
+  "Op til 30 produkter",
+  "Responsivt design (mobil + tablet)",
+  "1 designrevision",
+  "Produktsider med billeder og beskrivelse",
+  "Indkøbskurv og checkout-flow",
+  "SSL-certifikat (https)",
+];
 
-// Content creation hours: [efficient, collaborative]
-export const CONTENT_HOURS: Record<string, [number, number]> = {
-  "has-content": [0, 0],
-  "needs-content": [8, 12],
-};
+// === Beregningsfunktioner ===
 
-// Hosting & domain hours
-export const HOSTING_HOURS: Record<string, number> = {
-  "yes-both": 2,
-  "domain-only": 2,
-  "no": 3,
-  "not-sure": 3,
-};
+export function formatDKK(amount: number): string {
+  return amount.toLocaleString("da-DK");
+}
 
-// Surcharge when client has own hosting (coordination + lost hosting revenue)
-export const OWN_HOSTING_SURCHARGE = 3000; // DKK flat
+export function calculateTotal(
+  selectedAddons: string[],
+  extraPages: number,
+  extraRevisions: number
+): number {
+  let total = BASE_PRICE;
+  for (const addon of ADDONS) {
+    if (addon.id === "extra-page") total += addon.price * extraPages;
+    else if (addon.id === "extra-revision") total += addon.price * extraRevisions;
+    else if (selectedAddons.includes(addon.id)) total += addon.price;
+  }
+  return total;
+}
 
-// Complexity thresholds for manual review
-export const COMPLEXITY_THRESHOLD_HOURS = 100;
-
-export const WEBSITE_SIZE_LABELS: Record<string, string> = {
-  "1-5": "1–5 sider",
-  "5-10": "5–10 sider",
-  "10+": "10+ sider",
-};
-
-export const WEBSHOP_SIZE_LABELS: Record<string, string> = {
-  "up-to-20": "Op til 20 produkter",
-  "20-100": "20–100 produkter",
-  "100+": "100+ produkter",
-};
+export function calculateWebshopTotal(
+  selectedAddons: string[],
+  extraRevisions: number
+): number {
+  let total = WEBSHOP_BASE_PRICE;
+  for (const addon of WEBSHOP_ADDONS) {
+    if (addon.id === "extra-revision") total += addon.price * extraRevisions;
+    else if (selectedAddons.includes(addon.id)) total += addon.price;
+  }
+  return total;
+}

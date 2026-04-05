@@ -1,75 +1,30 @@
-export type SolutionType = "website" | "webshop" | "landing-page" | "ved-ikke";
+export interface Addon {
+  id: string;
+  label: string;
+  description: string;
+  price: number;
+  type: "checkbox" | "quantity";
+  maxQuantity?: number;
+}
 
-export interface CalculatorState {
-  // Step 1 – Solution type
-  solutionType: SolutionType | null;
-
-  // Step 2 – Existing website
-  hasExistingWebsite: boolean | null;
-  existingUrl: string;
-
-  // Step 3 – Process type
-  processType: "efficient" | "balanced" | "collaborative" | null;
-
-  // Step 4 – Size
-  size: string | null;
-
-  // Step 5 – Additional features
-  additionalFeatures: string[];
-
-  // Step 6 – Special features
-  hasSpecialFeatures: boolean | null;
-  specialFeaturesDescription: string;
-
-  // Step 7 – Visual identity (efficient)
-  hasLogoAndColors: boolean | null;
-
-  // Step 7 – Visual identity (balanced/collaborative)
-  visualIdentityLevel: string | null;
-
-  // Step 8 – Content
-  contentStatus: "has-content" | "needs-content" | null;
-
-  // Step 9 – Hosting
-  hostingStatus: string | null;
-  wantsHostingSetup: boolean | null;
-
-  // Budget shortcut
-  usedBudgetShortcut: boolean;
-  consideredBudgetShortcut: boolean;
-
-  // Step 10 – Lead contact info
+export interface InstantState {
+  selectedAddons: string[];
+  extraPages: number;
+  extraRevisions: number;
+  extraProducts: number;
   leadName: string;
   leadEmail: string;
-  leadCompany: string;
   leadPhone: string;
-  leadDescription: string;
+  leadCompany: string;
 }
 
-export const initialCalculatorState: CalculatorState = {
-  solutionType: null,
-  hasExistingWebsite: null,
-  existingUrl: "",
-  processType: null,
-  size: null,
-  additionalFeatures: [],
-  hasSpecialFeatures: null,
-  specialFeaturesDescription: "",
-  hasLogoAndColors: null,
-  visualIdentityLevel: null,
-  contentStatus: null,
-  hostingStatus: null,
-  wantsHostingSetup: null,
-  usedBudgetShortcut: false,
-  consideredBudgetShortcut: false,
+export const initialInstantState: InstantState = {
+  selectedAddons: [],
+  extraPages: 0,
+  extraRevisions: 0,
+  extraProducts: 0,
   leadName: "",
   leadEmail: "",
-  leadCompany: "",
   leadPhone: "",
-  leadDescription: "",
+  leadCompany: "",
 };
-
-/** Returns the pricing category for a solution type */
-export function getPricingType(type: SolutionType | null): "website" | "webshop" {
-  return type === "webshop" ? "webshop" : "website";
-}
